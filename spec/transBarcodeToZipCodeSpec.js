@@ -9,7 +9,6 @@ describe('post', () => {
     beforeEach(() => {
         barcode = '|:|::|:|:|:||::::|:|::||:::::||::|:|::||::|::|||:::|' ;
         splitedBarcodes = [':|::|',':|:|:','||:::',':|:|:',':||::',':::||','::|:|','::||:',':|::|','||:::']
-
     });
 
    describe('parityBit', () => {
@@ -41,4 +40,45 @@ describe('post', () => {
         expect(main.buildCheckDigits(splitedBarcodes, loadBarcodes)).toEqual(expectCheckDigits);
     });
 
+    describe('buildZipCode', () => {
+        let rightCheckDigits;
+        let falseCheckDigits;
+
+        beforeEach(() => {
+            rightCheckDigits = [4, 5, 0, 5, 6, 1, 2, 3, 4, 0];
+            falseCheckDigits = [4, 5, 0, 5, 6, 1, 2, 3, 4, 2];
+        });
+
+
+        it('checkDigit is true', () => {
+           const expectZipCode = '45056-1234';
+            
+            expect(main.buildZipCode(rightCheckDigits)).toEqual(expectZipCode);
+        });
+
+        it('checkDigit is false', () => {
+            expect(main.buildZipCode(falseCheckDigits)).toEqual('This barcode is wrong');
+        });
+    })
+    
+    describe('printZipCode', () => {
+        let wrongBarcode;
+        let rightBarcode;
+        
+        beforeEach(() => {
+           wrongBarcode = ':|::|:|:|:||::::|:|::||:::::||::|:|::||::|::|||:::';
+           rightBarcode = '|:|::|:|:|:||::::|:|::||:::::||::|:|::||::|::|||:::|' 
+        });
+        
+       it('when barcode is wrong', () => {
+          expect(main.printZipCode(wrongBarcode)).toEqual('This barcode is wrong') ;
+       });
+        
+        it('when barcode is right', () => {
+           const expectZipCode = '45056-1234';
+           
+           expect(main.printZipCode(rightBarcode, loadBarcodes)).toEqual(expectZipCode);
+        });
+    });
+    
 });
