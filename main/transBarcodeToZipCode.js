@@ -1,7 +1,7 @@
 'use strict';
 
 function parityBit(barcode) {
-    if((barcode.length - 2) % 5 === 0 || barcode.length <= 52 || barcode.length >= 30) {
+    if((barcode.length - 2) % 5 === 0) {
         return true;
     }
 
@@ -25,7 +25,21 @@ function buildSplitedBarcodes(barcode) {
     return splitedBarcodes;
 }
 
+function buildCheckDigits(splitedBarcodes, numBarcodes) {
+    const checkDigits = [];
+    for(const splitedBarcode of splitedBarcodes) {
+        const numBarcode = numBarcodes.find(numBarcode => numBarcode.code === splitedBarcode);
+
+        if(numBarcode) {
+            checkDigits.push(numBarcode.num);
+        }
+    }
+
+    return checkDigits;
+}
+
 module.exports = {
     parityBit: parityBit,
-    buildSplitedBarcodes: buildSplitedBarcodes
+    buildSplitedBarcodes: buildSplitedBarcodes,
+    buildCheckDigits: buildCheckDigits
 };

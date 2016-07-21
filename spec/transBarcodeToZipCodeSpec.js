@@ -1,11 +1,15 @@
 'use strict';
 
 const main = require('../main/transBarcodeToZipCode');
+const loadBarcodes = require('./fixtures');
 
 describe('post', () => {
     let barcode;
+    let splitedBarcodes;
     beforeEach(() => {
-       barcode = '|:|::|:|:|:||::::|:|::||:::::||::|:|::||::|::|||:::|' ;
+        barcode = '|:|::|:|:|:||::::|:|::||:::::||::|:|::||::|::|||:::|' ;
+        splitedBarcodes = [':|::|',':|:|:','||:::',':|:|:',':||::',':::||','::|:|','::||:',':|::|','||:::']
+
     });
 
    describe('parityBit', () => {
@@ -24,9 +28,17 @@ describe('post', () => {
            expect(main.parityBit(falseBarcode)).toEqual(false);
        });
    });
+    
     it('buildSplitedBarcodes', () => {
         const expectSplitedBarcodes = [':|::|',':|:|:','||:::',':|:|:',':||::',':::||','::|:|','::||:',':|::|','||:::']
 
        expect(main.buildSplitedBarcodes(barcode)).toEqual(expectSplitedBarcodes);
     });
+    
+    it('buildCheckDigits', () => {
+       const expectCheckDigits =  [4, 5, 0, 5, 6, 1, 2, 3, 4, 0];
+
+        expect(main.buildCheckDigits(splitedBarcodes, loadBarcodes)).toEqual(expectCheckDigits);
+    });
+
 });
