@@ -1,7 +1,7 @@
 'use strict';
 
 function printZipCode(barcode, numBarcodes) {
-    if(!parityBit(barcode)) {
+    if (!parityBit(barcode)) {
         return 'This barcode is wrong';
     }
 
@@ -12,52 +12,42 @@ function printZipCode(barcode, numBarcodes) {
 }
 
 function parityBit(barcode) {
-    if((barcode.length - 2) % 5 === 0) {
-        return true;
-    }
-
-    return false;
+    return (barcode.length - 2) % 5 === 0;
 }
 
 function buildSplitedBarcodes(barcode) {
-    const splited = barcode.split('');
-    let element = '';
+    const splited = barcode.slice(1, -1).split('');
     const splitedBarcodes = [];
-
-    for(let i = 1 ; i < splited.length - 1 ; i++) {
-        element += splited[i];
-
-        if(i % 5 === 0) {
-            splitedBarcodes.push(element);
-            element = '';
+    let i = 0;
+    const reduced = splited.reduce((a, b) => {
+        if (i % 5 === 0 && i != 0) {
+            splitedBarcodes.push(a);
+            a = '';
         }
-    }
+        i++;
+
+        return a + b;
+    }, '');
+
+    splitedBarcodes.push(reduced);
 
     return splitedBarcodes;
 }
 
 function buildCheckDigits(splitedBarcodes, numBarcodes) {
-    const checkDigits = [];
-    for(const splitedBarcode of splitedBarcodes) {
-        const numBarcode = numBarcodes.find(numBarcode => numBarcode.code === splitedBarcode);
 
-        if(numBarcode) {
-            checkDigits.push(numBarcode.num);
-        }
-    }
-
-    return checkDigits;
+    return splitedBarcodes.map(splitedBarcode => numBarcodes.find(numBarcode => numBarcode.code === splitedBarcode).num);
 }
 
 function buildZipCode(checkDigits) {
-    if(!judeCheckDigit(checkDigits)) {
+    if (!judeCheckDigit(checkDigits)) {
         return 'This barcode is wrong';
     }
 
-    if(checkDigits.length != 6){
+    if (checkDigits.length != 6) {
         let prv = checkDigits[5];
         let next;
-        for(let i = 6; i < checkDigits.length ; i++) {
+        for (let i = 6; i < checkDigits.length; i++) {
             next = checkDigits[i];
             checkDigits[i] = prv;
             prv = next;
@@ -66,17 +56,15 @@ function buildZipCode(checkDigits) {
         checkDigits[5] = '-';
     }
 
-    return checkDigits.reduce((prv, next) => {return prv + next.toString()}, '');
+    return checkDigits.reduce((prv, next) => {
+        return prv + next.toString()
+    }, '');
 }
 
 function judeCheckDigit(checkDigits) {
     const sum = checkDigits.reduce((prv, next) => prv + next);
 
-    if(sum % 10 === 0) {
-        return true;
-    }
-
-    return false;
+    return sum % 10 === 0;
 }
 
 module.exports = {
