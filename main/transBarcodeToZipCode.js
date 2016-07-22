@@ -44,21 +44,11 @@ function buildZipCode(checkDigits) {
         return 'This barcode is wrong';
     }
 
-    if (checkDigits.length != 6) {
-        let prv = checkDigits[5];
-        let next;
-        for (let i = 6; i < checkDigits.length; i++) {
-            next = checkDigits[i];
-            checkDigits[i] = prv;
-            prv = next;
-        }
-
-        checkDigits[5] = '-';
-    }
-
-    return checkDigits.reduce((prv, next) => {
-        return prv + next.toString()
+    const zipCode = checkDigits.reduce((a, b) => {
+        return a + b.toString()
     }, '');
+
+    return `${zipCode.slice(0, 5)}-${zipCode.slice(5,-1)}`;
 }
 
 function judeCheckDigit(checkDigits) {
