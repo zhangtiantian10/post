@@ -22,7 +22,23 @@ function formatZipCode(zipCode) {
     return newZipCode.split('');
 }
 
+function buildCheckDigits(zipCodes) {
+    let checkDigits = zipCodes.map(zipCode => parseInt(zipCode));
+    const sum = checkDigits.reduce((a,b) => a + b);
+    let checkDigit;
+    if (sum % 10 != 0) {
+        checkDigit = 10 - sum % 10;
+    } else {
+        checkDigit = 0;
+    }
+
+    checkDigits.push(checkDigit);
+    
+    return checkDigits;
+}
+
 module.exports = {
     partiyBit: partiyBit,
-    formatZipCode: formatZipCode
+    formatZipCode: formatZipCode,
+    buildCheckDigits:buildCheckDigits
 };
