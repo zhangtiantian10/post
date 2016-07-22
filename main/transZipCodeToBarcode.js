@@ -13,6 +13,16 @@ function partiyBit(zipCode) {
     return false;
 }
 
+function formatZipCode(zipCode) {
+    const splitedZipCodes = zipCode.split('-');
+    const newZipCode = splitedZipCodes.reduce((prv, next) => {
+        return prv + next;
+    },'');
+
+    return newZipCode.split('');
+}
+
 module.exports = {
-    partiyBit: partiyBit
+    partiyBit: partiyBit,
+    formatZipCode: formatZipCode
 };
