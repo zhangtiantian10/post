@@ -33,12 +33,22 @@ function buildCheckDigits(zipCodes) {
     }
 
     checkDigits.push(checkDigit);
-    
+
     return checkDigits;
+}
+
+function buildBarcode(checkDigits, numBarcodes) {
+    return `|${checkDigits.reduce((a,b) => {
+       const numBarcode = numBarcodes.find(numBarcode => numBarcode.num === b);
+        if(numBarcode) {
+            return a + numBarcode.code;
+        }
+    }, '')}|`;
 }
 
 module.exports = {
     partiyBit: partiyBit,
     formatZipCode: formatZipCode,
-    buildCheckDigits:buildCheckDigits
+    buildCheckDigits:buildCheckDigits,
+    buildBarcode: buildBarcode
 };

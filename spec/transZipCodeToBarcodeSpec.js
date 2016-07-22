@@ -1,14 +1,17 @@
 'use strict';
 
 const main = require('../main/transZipCodeToBarcode');
+const loadBarcodes = require('./fixtures');
 
 describe('post', () => {
     let zipCode;
     let zipCodes;
+    let checkDigits;
     
     beforeEach(() => {
         zipCode = '45056-1234';
         zipCodes = ['4','5','0','5','6','1','2','3','4'];
+        checkDigits = [4,5,0,5,6,1,2,3,4,0];
     });
     
    describe('partiyBit', () => {
@@ -43,5 +46,11 @@ describe('post', () => {
         const expectCheckDigits = [4,5,0,5,6,1,2,3,4,0];
 
         expect(main.buildCheckDigits(zipCodes)).toEqual(expectCheckDigits);
+    });
+    
+    it('buildBarcode', () => {
+        const expectBarcode = '|:|::|:|:|:||::::|:|::||:::::||::|:|::||::|::|||:::|';
+        
+        expect(main.buildBarcode(checkDigits, loadBarcodes)).toEqual(expectBarcode);
     });
 });
