@@ -53,4 +53,26 @@ describe('post', () => {
         
         expect(main.buildBarcode(checkDigits, loadBarcodes)).toEqual(expectBarcode);
     });
+
+    describe('printBarcode', () => {
+        let rightZipCode;
+        let wrongZipCode;
+        let wrongZipCodeTwo;
+
+        beforeEach(() => {
+            rightZipCode = '45056-1234';
+            wrongZipCode = '4567';
+            wrongZipCodeTwo = '4505a-1234'
+        });
+
+        it('when zipCode is right ', () => {
+            const expectBarcode = '|:|::|:|:|:||::::|:|::||:::::||::|:|::||::|::|||:::|';
+
+            expect(main.printBarcode(rightZipCode,loadBarcodes)).toEqual(expectBarcode);
+        });
+
+        it('when zipCode is wrong', () => {
+            expect(main.printBarcode(wrongZipCode,loadBarcodes)).toEqual('This zipCode is wrong!');
+        });
+    });
 });
